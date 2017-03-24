@@ -22,7 +22,22 @@ void print_vector(std::vector<int> v){
 	std::cout << std::endl;
 }
 
-// int dfs()
+void dfs(int curr_cell, std::vector<std::vector<int>> graph, std::vector<int> path, std::vector<bool> used, int final){
+	used[curr_cell] = 1;
+	if(curr_cell == final){
+		print_vector(path);
+		return;
+	}
+	for (int i = 0; i < graph[curr_cell].size(); i++){
+		int to = graph[curr_cell][i];
+		if(!used[to]){
+			path.push_back(to);
+
+			dfs(to, graph, path, used, final);
+			path.pop_back();
+		}
+	}
+}
 
 int main(){
 	int h = 3, w = 3;
@@ -53,7 +68,7 @@ int main(){
 	// 	print_vector(ma[i]);
 
 	// }
-	
+
 	std::cout << std::endl;
 
 	std::vector<std::vector<int>> tabl;
@@ -84,6 +99,27 @@ int main(){
 			tabl.push_back(temp);
 		}
 	}
+
+	// void dfs(int curr_cell, std::vector<std::vector<int>> graph, std::vector<int> path, std::vector<bool> used, int final)
+	int curr_cell = 0;
+	std::vector<int> path;
+	std::vector<bool> used;
+	used.assign(h*w, 0);
+	int final = 0;
+
+	for(int i = 0; i < h; i++){
+		for(int j = 0; j < w; j++){
+			if(ma[i][j] == 3){
+				final = convert(i, j, w);
+			} else if (ma[i][j] == 1){
+				curr_cell = convert(i, j, w);
+			}
+		}
+	}
+	path.push_back(curr_cell);
+	dfs(curr_cell, tabl, path, used, final);
+
+	// print_vector(path);
 
 	return 0;
 }
