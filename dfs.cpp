@@ -1,25 +1,17 @@
 #include <iostream>
 #include <vector>
 
-class Cell{
-public:
-	Cell() = default;
-	Cell(char t);
-	int type = 0;
-	bool visited = false;
-};
-Cell::Cell(char type_){
-	if(type_ == ' ')
-			type = 0;
-	else if(type_ == '#')
-			type = 1;
-	else if(type_ == '.')
-			type = 2;
-	else if(type_ == '*')
-			type = 3;
+bool check(int i, int j, int h, int w, std::vector<std::vector<int>> ma) {
+	if(i < h && i >= 0 && j < w && j>= 0){
+		if(ma[i][j] != 2){
+			return true;
+		}
+	}
+	return false;
+}
 
-	visited = false;
-
+int convert(int i, int j, int w){
+	return (w*i + j);
 }
 
 void print_vector(std::vector<int> v){
@@ -30,38 +22,20 @@ void print_vector(std::vector<int> v){
 	std::cout << std::endl;
 }
 
+// int dfs()
+
 int main(){
 	int h = 3, w = 3;
-	// char m[h][w] = {
-	// "    .",
-	// " ##  ",
-	// "   # ",
-	// " *  #"
-	// };
-	// char m[h][w]{
-	// 	"00.",
-	// 	"0#0",
-	// 	"000"
-	// };
 
-	int m[h][w]{
+	int m[h][w] = {
 		{0, 0, 1},
 		{0,2,0},
-		{0,0,0}
+		{3,0,0}
 	};
-
-	//Cell maze[h][w];
-	// std::cout << "m[1][1]" << std::endl;
-	// std::cout << m[1][1] << std::endl;
-	// if(m[1][1] == '#'){
-	// 	std::cout << "ALARM" << std::endl;
-	// }
 
 	for (int i = 0; i < h; i++){
 		for (int j = 0; j < w; j++){
 			std::cout << m[i][j];
-			// maze[i][j] = Cell(m[i][j]);
-			// std::cout << maze[i][j].type;
 		}
 		std::cout << std::endl;
 	}
@@ -75,14 +49,11 @@ int main(){
 		}
 	}
 
-	for(int i = 0; i < h; i++){
-		print_vector(ma[i]);
+	// for(int i = 0; i < h; i++){
+	// 	print_vector(ma[i]);
 
-	}
-	std::cout << std::endl;
-
-	std::cout << ma.at(1).at(-1) << std::endl;
-
+	// }
+	
 	std::cout << std::endl;
 
 	std::vector<std::vector<int>> tabl;
@@ -90,28 +61,29 @@ int main(){
 	for (int i = 0; i < h; i++){
 		for (int j = 0; j < w; j++){
 			std::vector<int> temp;
-			for(int k = 0; k < h*w; k++){
-				// if (m[i][j-1] != '#' && m[i][j+1] != '#' && m[i-1][j] != '#' && m[i+1][j] != '#' ){
-				if ( ((i*w + j + 1) == k || (i*w + j - 1) == k || ((i+1)*w + j) == k || ((i-1)*w + j) == k) && **(m + k + 1) != 2){
-					temp.push_back(k);
-				}
+
+			if (ma[i][j] == 2){
+				print_vector(temp);
+				tabl.push_back(temp);
+				continue;
+			}
+
+			if(check(i, j+1, h, w, ma)){
+				temp.push_back(convert(i, j+1, w));
+			}
+			if(check(i, j-1, h, w, ma)){
+				temp.push_back(convert(i, j-1, w));
+			}
+			if(check(i+1, j, h, w, ma)){
+				temp.push_back(convert(i+1, j, w));
+			}
+			if(check(i-1, j, h, w, ma)){
+				temp.push_back(convert(i-1, j, w));
 			}
 			print_vector(temp);
 			tabl.push_back(temp);
 		}
 	}
-
-	for (int i = 0; i < h; i++){
-		std::vector<int> temp;
-		for (int k = 0; k < h*w; k++){
-			// if ( )
-		}
-	}
-
-
-
-	// std::cout << tabl[0] << std::endl;
-	// print_vector(tabl[0]);
 
 	return 0;
 }
